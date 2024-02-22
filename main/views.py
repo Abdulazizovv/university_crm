@@ -5,6 +5,7 @@ from django.urls import reverse
 from .models import Employee, Document, SubmitDocument, TeacherGroup, Group
 from django.contrib import messages
 from django.db.models import Count
+from django.contrib.auth.decorators import login_required
 
 
 def update_employee_status(employee_id):
@@ -25,7 +26,7 @@ def update_employee_status(employee_id):
         employee.status = "inactive"
         employee.save()
 
-
+@login_required(login_url="/admin")
 def index(request):
     items_per_page = 10
     employees = Employee.objects.all().order_by("last_name")
