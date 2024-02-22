@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %}
+Hujjatlar
+{% endblock title %}
+
+{% block content %}
+
+<style>
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        margin-top: 15px;
+        margin-bottom: 15px;
+      }
+      .tables {
+        width: 700px;
+        min-height: 500px;
+        background-color: #fff;
+        padding: 50px;
+        border-radius: 30px;
+        border: 2px solid black; /* Changed */
+        
+      }
+      
+      .tables .table-title{
+        font-weight: 700;
+        margin-bottom: 30px;
+        height: 50px;
+      }
+      .tables .table-title h1{
+        margin-bottom: 10px;
+        margin-left: 50px;
+        text-align: left;
+      }
+      
+      hr{
+        margin-top: 10px;
+        width: 100%;
+        border: 1px solid #ddd;
+      }
+      .tables .table-items {
+        display: flex;
+        flex-direction: column;
+        gap: 2rem;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        border-radius: 8px;
+        overflow: hidden;
+      }
+      
+      thead th {
+        background-color: #f2f2f2;
+        color: #727070;
+        width: 100%;
+        font-weight: bold;
+        padding-left: 20px;
+      }
+      thead th td{
+        text-transform: uppercase;
+        font-size: 14px;
+      }
+      
+      /* tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+      } */
+      tbody tr{
+        display: flex;
+        justify-content: space-between;
+        padding: 0 20px;
+        align-items: center;
+      }
+      
+      tbody tr:hover {
+        background-color: #ddd;
+      }
+      
+      td {
+        padding: 12px 0;
+      }
+      
+      select {
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+      }
+      
+      .status select {
+        width: 50%;
+      }
+      
+      .edit input[type="checkbox"]{
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #ccc;
+        transition: 0.3s all ease-in-out;
+      }
+      .edit input[type="checkbox"]:checked {
+        background-color: #00ff2a;
+        border-color: #007bff;
+      }
+      
+
+</style>
+
+
+<div class="root">
+    <div class="container mt-5">
+        <div class="tables">
+          <div class="table-title">
+            <h1 class="text-center">{{employee}}</h1>
+            <hr />
+          </div>
+          <div class="table-items">
+                <div class="status">
+                  {% if groups %}  
+                  <form id="myForm" method="get">
+                    <label for="group">Guruhni tanlang</label>
+                    <select name="group" id="status">
+                        {% if selected_group %}
+                        <option value="{{group.id}}">{{selected_group.teachgroup.title}}</option>
+                        {%endif%}
+                        {% for group in groups %}
+                        {% if group.id != selected_group.id %}
+                        <option value="{{group.id}}">{{group.teachgroup.title}}</option>
+                        {% endif %}
+                        {%endfor%}
+                    </select>
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalCenter">
+                      Yangi guruh biriktirish
+                    </button>
+                    {% else %}
+                    <h5 class="text-center text-danger">O'qituvchini guruhlari mavjud emas! Avval ularni qo'shing <br>
+                      <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModalCenter">
+                        Guruh qo'shish
+                      </button></h5>
+                    {% endif %}
+                </div>
+            <table>
+              {% if documents %}
+                <form method="POST"> {% csrf_token %}
+              <thead>
+                <tr>
+                  <th>Topshirilishi kerak bo'lgan hujjatlar</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for document in documents %}
+                <tr>
+                  <td>{{ document.title }}</td>
+                  <td class="edit">
+                    <input type="checkbox" name="submitted_documents" value="{{ document.id }}" {% if document.id in submitted_document_ids %} checked {% endif %} />
+                  </td>
+                </tr>
+                {% endfor %}
+                <input type="hidden" name="selected_group" value="{{selected_group.id}}"/>
+
+
+              </tbody>
+            </table>
+            <button class="btn btn-primary" type="submit">Saqlash</button>
+            </form>
+            {% else %}
+            <h2 class="text-center text-muted">Hujjatlar mavjud emas <br> <a href="{% url "documents" %}"> <button class="btn btn-secondary">
+              Hujjatlar
+            </button></a> </h2>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+</div>
+
+
+<script>
+    document.getElementById('status').addEventListener('change', function() {
+        document.getElementById('myForm').submit();
+      });
+</script>
+
+{% include "select_group_modal.html" %}
+
+{% endblock %}

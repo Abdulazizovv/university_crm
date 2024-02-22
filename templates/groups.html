@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}
+Guruhlar
+{% endblock title %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Barcha guruhlar</h2>
+    <table class="table mt-5">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Guruh nomi</th>
+            <th scope="col">Harakat<i class="fa fa-link"></i></th>
+          </tr>
+        </thead>
+        <tbody>
+            {% if groups %}
+            {% for group in groups %}
+        <tr>
+            <th scope="row">{{forloop.counter}}</th>
+            <td>{{group.title}}</td>
+            {% comment %} <td><a href="" class="text-danger"><i class="fa-solid fa-trash"></i></a></td> {% endcomment %}
+            <td><button type="button" class="btn btn-danger delete-expense-btn" 
+                data-toggle="modal" 
+                data-target="#deleteModal"
+                data-group-id="{{group.id}}">
+                    <i class="fas fa-trash"></i>
+                </button></td>
+            
+        </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+            <h2 class="text-center text-danger">
+                Guruhlar mavjud emas! <br> 
+
+            </h2>
+            </tr>
+            {% endif %}
+        </tbody>
+      </table>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#centralModalSm">
+        Guruh qo'shish
+      </button>
+</div>
+
+
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">O'chirishni tasdiqlash</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Rostdan ham o'chirasizmi</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Bekor qilish</button>
+                <a id="deleteExpenseLink" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> O'chirish
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    $('#deleteModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget);
+        var groupId = button.data('group-id');
+        var deleteLink = "{% url 'delete_group' 0 %}".replace('0', groupId);
+        $('#deleteExpenseLink').attr('href', deleteLink);
+    });
+</script>
+
+
+{% include "new_group_modal.html" %}
+{% endblock content %}

@@ -1,0 +1,48 @@
+<!-- Button trigger modal -->
+
+  
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+    aria-hidden="true">
+  
+    <!-- Add .modal-dialog-centered to .modal-dialog to vertically center the modal -->
+    <div class="modal-dialog modal-dialog-centered" role="document">
+  
+  
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Guruh biriktirish</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            {% if all_groups %}
+            <form action="{% url "connect_group" %}" method="post">
+                {% csrf_token %}
+                <!-- Other form fields for the teacher (if any) -->
+            
+                <div class="form-group">
+                    <label for="id_groups">Select Groups:</label>
+                    <select class="form-control" name="groups" id="id_groups" multiple>
+                        {% for group in all_groups %}
+                            <option value="{{ group.id }}">{{ group.title }}</option>
+                        {% endfor %}
+                    </select>
+                    <input type="hidden" name="redirect_url" value="{{request.path}}">
+                    <input type="hidden" name="employee" id="" value="{{employee.id}}">
+                </div>
+            
+                <button type="submit" class="btn btn-primary">Tasdiqlash</button>
+            </form>
+            {% else %}
+            Guruhlar mavjud emas <br>
+            Avval guruh <a href="{% url "groups" %}">qo'shing </a>
+            {% endif %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Yopish</button>
+        </div>
+      </div>
+    </div>
+  </div>

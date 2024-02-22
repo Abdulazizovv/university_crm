@@ -1,0 +1,131 @@
+{% load static %}
+<!DOCTYPE html>
+<!---Coding By CodingLab | www.codinglabweb.com--->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}">
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/popper.js' %}"></script>
+    <script src="{% static 'js/bootstrap.js' %}"></script>
+    <title>Registratsiya</title>
+    <!---Custom CSS File--->
+    <link rel="stylesheet" href="{% static 'css/reg_style.css' %}" />
+  </head>
+  <body>
+    <section class="container">
+      <header>Registratsiya</header>
+      <a href="{% url 'index' %}"><button class="btn btn-secondary">Bosh menu</button></a>
+      <form action="" class="form" method="post"> {% csrf_token %}
+        <div class="input-box">
+          <label>Ism</label>
+          <input type="text" placeholder="Ism" name="first_name" required />
+          <label>Familya</label>
+          <input type="text" placeholder="Familiya" name="last_name" required />
+        </div>
+        <div class="input-box">
+          <label>Fuqaroligi</label>
+          <input type="text" placeholder="Fuqaroligi" name="citizen" required />
+        </div>
+        <div class="column">
+          <div class="input-box passport">
+          <label>Passport seriya</label>
+          <input type="text" placeholder="Passport seriya" name="passport" required />
+        </div>
+        <div class="input-box">
+          <label>JSHShIR</label>
+          <input type="text" placeholder="JSHR" name="jshshr" required />
+        </div>
+      </div>
+        <div class="input-box">
+          <label>Passport amal qilish muddati</label>
+          <input type="date" placeholder="Amal qilish muddati" name="pass_date" required />
+        </div>
+
+        <div class="input-box">
+          <label>Email address</label>
+          <input type="text" placeholder="Email address" name="email" required />
+        </div>
+
+        <div class="column">
+          <div class="input-box">
+            <label>Telefon raqam</label>
+            <input type="text" placeholder="Telefon raqam" name="phone_number" required />
+          </div>
+          <div class="input-box">
+            <label>Tug'ilgan kuni</label>
+            <input type="date" placeholder="Tug'ilgan kuni" name="birthdate" required />
+          </div>
+        </div>
+
+        <div class="gender-box">
+          <h3>Jinsi</h3>
+          <div class="gender-option">
+            <div class="gender">
+              <input type="radio" id="check-male" name="gender" checked />
+              <label for="check-male">Erkak</label>
+            </div>
+            <div class="gender">
+              <input type="radio" id="check-female" name="gender" />
+              <label for="check-female">Ayol</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-box address">
+          <label>Tug'ilgan joy</label>
+          <div class="column">
+            <div class="select-box">
+              <select name="country">
+                <option hidden>Davlat</option>
+                <option value="Uzbekistan">Uzbekistan</option>
+                <option value="Korea">Korea</option>
+                <option value="Kirgizistan">Kirgizistan</option>
+                <option value="Kazakhstan">Kazakhstan</option>
+                <option value="Russia">Russia</option>
+              </select>
+            </div>
+            <input type="text" name="village" placeholder="Viloyat" required />
+          </div>
+          <div class="column">
+            <input type="text" name="city" placeholder="Shahar / Tuman" required />
+          </div>
+          <div class="input-box manzil">
+          <label>O'zbekistonda yashash manzili</label>
+          <div class="column">
+            <input type="text" name="live_village" placeholder="Viloyat" required />
+            <input type="text" name="live_city" placeholder="Shahar / Tuman" required />
+          </div>
+           <div class="column">
+            <input type="text" name="live_mfy" placeholder="MFY" required />
+            <input type="text" name="live_street" placeholder="Ko'cha" required />
+             <input type="text" name="live_home" placeholder="Uy" required />
+          </div>
+          
+
+      <div class="input-box malumot">
+          <label>Ma'lumoti / Tamomlagan oliy o`quv yurti</label>
+          <div class="column">
+            <input type="text" name="study_country" placeholder="Davlat" required />
+            <input type="text" name="stydy_univer" placeholder="O'quv yurt nomi" required />
+         </div>
+         <div class="column">
+
+            <input type="text" name="speciality" placeholder="Diplom bo'yicha mutaxasisligi" required />
+            <input type="text" name="degree" placeholder="Ilmiy daraja (magistr, PhD, DSc) ">
+           
+         </div>
+        </div>
+
+
+      </div>
+
+        
+        <button>Saqlash</button>
+      </form>
+    </section>
+  </body>
+</html>

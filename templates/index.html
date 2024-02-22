@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% endblock %}
+
+
+{% block content %}
+
+<style>
+    /* Customize your styles */
+    .avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+    }
+    .active {
+        color: green;
+    }
+    .inactive {
+        color: red;
+    }
+
+</style>
+
+
+
+
+<div class="container mt-4">
+    <h1 class="mb-4">Contact Management</h1>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <form id="search-form" action="" method="GET">
+                    <input type="text" id="search-input" name="search" class="form-control" placeholder="Search by name">
+                    <!-- You can include a submit button if needed -->
+                    <!-- <button type="submit">Search</button> -->
+                </form>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <form id="statusForm" action="" method="get">
+            <div class="form-group">
+                <select name="sort" id="statusSelect" class="form-control">
+                    <option value="">Hammasi</option>
+                    <option value="active">Active</option>
+                    <option value="inactive">inActive</option>
+                </select>
+            </div>
+        </form>
+        </div>
+    </div>
+    <table id="employee-table" class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Name (Family Name)</th>
+                <th>Passport</th>
+                <th>Telephone Number</th>
+                <th>Email</th>
+                <th>Darajasi</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for employee in employees %}
+            
+            <tr>
+                <td><a href="{% url "document" employee.id %}"><img src="{{employee.image.url}}" alt="" class="avatar">{{employee.get_full_name}}</a></td>
+                <td>{{employee.pass_number}}</td>
+                <td>{{employee.phone_number}}</td>
+                <td>{{employee.email}}</td>
+                <td>{{employee.edu_degree}}</td>
+                {% if employee.status == 'active' %}
+                <td><span class="active">{{employee.status}}</span></td>
+                {% else %}
+                <td><span class="inactive">{{employee.status}}</span></td>
+                {% endif %}
+            </tr>
+        
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <!-- Pagination controls -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            {% if employees.has_previous %}
+            <li class="page-item">
+                <a href="?page=1" class="page-link">&laquo; First</a>
+            </li>
+            <a href="?page={{ employees.previous_page_number }}" class="page-link">Previous</a>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link" tabindex="-1" aria-disabled="true">Previous</span>
+            </li>
+            {% endif %}
+    
+            <!-- Display up to 5 page numbers -->
+            {% for num in employees.paginator.page_range %}
+                {% if employees.number == num %}
+                    <li class="page-item active" aria-current="page">
+                        <span class="page-link">{{ num }}</span>
+                    </li>
+                {% else %}
+                    {% if num > employees.number|add:'-3' and num < employees.number|add:'3' %}
+                        <li class="page-item">
+                            <a href="?page={{ num }}" class="page-link">{{ num }}</a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+    
+            {% if employees.has_next %}
+            <li class="page-item">
+                <a href="?page={{ employees.next_page_number }}" class="page-link">Next</a>
+            </li>
+            <li class="page-item">
+                <a href="?page={{ employees.paginator.num_pages }}" class="page-link">&raquo; Last</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <span class="page-link" tabindex="-1" aria-disabled="true">Next</span>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var searchInput = document.getElementById('search-input');
+        var employeeTableBody = document.getElementById('employee-table-body');
+        
+        searchInput.addEventListener('input', function() {
+            var searchValue = this.value.trim().toLowerCase();
+            if (searchValue.length > 0) {
+                search(searchValue);
+            } else {
+                employeeTableBody.innerHTML = ''; // Clear table body if search input is empty
+            }
+        });
+
+        function search(query) {
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        // Handle successful response
+                        employeeTableBody.innerHTML = xhr.responseText;
+                    } else {
+                        // Handle error response
+                        employeeTableBody.innerHTML = 'Error: ' + xhr.status;
+                    }
+                }
+            };
+            xhr.open('GET', '?search=' + encodeURIComponent(query), true);
+            xhr.send();
+        }
+    });
+
+    var selectElement = document.getElementById('statusSelect');
+
+    // Add event listener to the select element
+    selectElement.addEventListener('change', function() {
+        // Submit the form when the select option is changed
+        document.getElementById('statusForm').submit();
+    });
+
+    // Set the selected option after page load
+    var selectedOption = "{{ request.GET.sort }}"; // Assumes you're using Django templating
+    if (selectedOption) {
+        selectElement.value = selectedOption;
+    }
+</script>
+
+
+
+
+{% endblock content %}
