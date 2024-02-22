@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import connect_group, delete_document, delete_group, documents, groups, index, detail, registration
+from .views import connect_group, delete_document, delete_group, documents, groups, index, detail, registration, user_login
 
 urlpatterns = [
     path("", index, name="index"),
+    path('login/', user_login, name="login"),
     path("documents/<int:id>/", detail, name="document"), 
     path("register/", registration, name="register"),
     path("connect-group/", connect_group, name="connect_group"),

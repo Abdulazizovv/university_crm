@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>Kirish</title>
+  <link rel="stylesheet" href="{% static "css/style.css" %}">
+  <script src="{% static "js/script.js" %}"></script>
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<section class='login' id='login'>
+  <div class='head'>
+  <h1 class='company'>KIUF Teacher</h1>
+  </div>
+  <p class='msg'>Xush kelibsiz</p>
+  <div class='form'>
+    <form method="POST">{% csrf_token %}
+  <input type="text" name="username" placeholder='Username' class='text' id='username' required><br>
+  <input type="password" name="password" placeholder='••••••••••••••' class='password'><br>
+  <button class="btn-login" type="submit">Kirish</button>
+    </form>
+  </div>
+</section>
+
+
+</body>
+</html>

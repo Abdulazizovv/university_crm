@@ -6,6 +6,24 @@ from .models import Employee, Document, SubmitDocument, TeacherGroup, Group
 from django.contrib import messages
 from django.db.models import Count
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login
+
+
+
+def user_login(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            # Redirect to a success page.
+            return redirect('index')  # Redirect to the dashboard page after login.
+        else:
+            # Return an 'invalid login' error message.
+            return render(request, 'login.html', {'error_message': 'Invalid username or password'})
+
+    return render(request, 'login.html')
 
 
 def update_employee_status(employee_id):
@@ -26,7 +44,7 @@ def update_employee_status(employee_id):
         employee.status = "inactive"
         employee.save()
 
-@login_required(login_url="/admin")
+@login_required(login_url="login")
 def index(request):
     items_per_page = 10
     employees = Employee.objects.all().order_by("last_name")
